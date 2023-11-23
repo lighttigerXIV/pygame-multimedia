@@ -1,0 +1,85 @@
+import pygame
+import random
+
+
+pygame.init()
+DISPLAYSURF = pygame.display.set_mode((800,800))
+# game name
+pygame.display.set_caption("game_name")
+
+# create cursor_weapon
+image = pygame.image.load("mallet.png").convert_alpha()
+weapon = image.get_rect()
+
+# create empty list, then create X obstacle rectangles using a loop and add to list
+obstacles = []
+for _ in range(50):
+    obstacle_rect = pygame.Rect(random.randint(0, 400), random.randint(0, 600), 25, 25)
+    obstacles.append(obstacle_rect)
+
+# define colours
+
+GREEN = (0, 255, 0)
+RED = (255, 0, 0)
+BLUE = (0, 0, 255)
+WHITE = (255, 255, 255)
+
+# hide cursor
+pygame.mouse.set_visible(False)
+
+#background 
+
+DISPLAYSURF.fill(WHITE)
+background = pygame.image.load("National-Flower-Day.jpg")
+
+#button class for menu
+click1 = pygame.image.load("button.png").convert_alpha()
+click2 = pygame.image.load("button2.png").convert_alpha()
+
+class Button():
+    def __init__(self, x, y, image):
+        self.image = image
+        self.rect = self.image.get_rect()
+        self.rect.topleft = (x,y)
+
+    def draw(self):
+        DISPLAYSURF.blit(self.image, (self.rect.x, self.rect.x))
+
+start_button = Button(100, 200, click1)
+multi_button = Button(200, 200, click2)
+#score_button = Button(100, 600, button)
+
+run = True
+while run:
+    # update background
+    DISPLAYSURF.blit(background, (0,0))
+
+    start_button.draw()
+    multi_button.draw()
+    #score_button.draw()
+
+    # check collision and change colour
+    col = GREEN
+    #if weapon.collidelist(obstacles) >= 0 and pygame.mouse.get_pressed(num_buttons=1)[0]:
+    if weapon.collidelist(obstacles) >= 0 and pygame.mouse.get_pressed()[0]:
+        #print("colide")
+        col = RED
+        #obstacles.pop()
+
+    # get mouse coordinates and use them to position the rectangle
+    pos = pygame.mouse.get_pos()
+    weapon.center = pos
+
+    # draw all rectangles
+    DISPLAYSURF.blit(image, weapon.topleft)  # blit the image onto the DISPLAYSURF
+    for obstacle in obstacles:
+        pygame.draw.rect(DISPLAYSURF, col, obstacle)
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            run = False
+
+    # update display
+    pygame.display.update()
+
+pygame.quit()
