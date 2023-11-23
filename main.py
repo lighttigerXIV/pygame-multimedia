@@ -44,8 +44,8 @@ menu_background = pygame.image.load("menu_background.jpg")
 menu_background = pygame.transform.scale(menu_background, (600, 800))
 
 # button class for menu
-click1 = pygame.image.load("button.png").convert_alpha()
-click2 = pygame.image.load("button2.png").convert_alpha()
+click1 = pygame.image.load("yellow.png").convert_alpha()
+click2 = pygame.image.load("red.png").convert_alpha()
 
 
 class Button():
@@ -57,16 +57,17 @@ class Button():
     def draw(self):
         DISPLAYSURF.blit(self.image, (self.rect.x, self.rect.y))
 
-
-start_button = Button(100, 200, click2)
-multi_button = Button(100, 325, click2)
-score_button = Button(100, 450, click2)
+big_button = Button (75, 25, click2)
+start_button = Button(100, 275, click1)
+multi_button = Button(100, 375, click1)
+score_button = Button(100, 475, click1)
 
 run = True
 while run:
     # update background
     DISPLAYSURF.blit(menu_background, (0, 0))
 
+    big_button.draw()
     start_button.draw()
     multi_button.draw()
     score_button.draw()
@@ -77,7 +78,7 @@ while run:
     if weapon.collidelist(obstacles) >= 0 and pygame.mouse.get_pressed()[0]:
         # print("colide")
         col = RED
-        # obstacles.pop()
+        obstacles.pop()
 
     # get mouse coordinates and use them to position the rectangle
     pos = pygame.mouse.get_pos()
