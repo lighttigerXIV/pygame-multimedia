@@ -12,7 +12,7 @@ show_game = False
 
 
 pygame.init()
-DISPLAYSURF = pygame.display.set_mode((600, 800))
+DISPLAYSURF = pygame.display.set_mode((400, 600))
 # game name
 pygame.display.set_caption("Jogo De Toupeiras")
 
@@ -58,9 +58,9 @@ class Button():
         DISPLAYSURF.blit(self.image, (self.rect.x, self.rect.y))
 
 
-start_button = Button(100, 200, click1)
-multi_button = Button(200, 200, click2)
-# score_button = Button(100, 600, button)
+start_button = Button(100, 200, click2)
+multi_button = Button(100, 325, click2)
+score_button = Button(100, 450, click2)
 
 run = True
 while run:
@@ -69,7 +69,7 @@ while run:
 
     start_button.draw()
     multi_button.draw()
-    # score_button.draw()
+    score_button.draw()
 
     # check collision and change colour
     col = GREEN
