@@ -22,7 +22,7 @@ weapon = image.get_rect()
 
 # create empty list, then create X obstacle rectangles using a loop and add to list
 obstacles = []
-for _ in range(50):
+for _ in range(0):
     obstacle_rect = pygame.Rect(random.randint(
         0, 400), random.randint(0, 600), 25, 25)
     obstacles.append(obstacle_rect)
@@ -53,9 +53,22 @@ class Button():
         self.image = image
         self.rect = self.image.get_rect()
         self.rect.topleft = (x, y)
+        self.clicked = False
 
     def draw(self):
+        state = False
+        posa = pygame.mouse.get_pos()
+
+        if self.rect.collidepoint(posa):
+            if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
+                self.clicked = True
+                state = True
+        if pygame.mouse.get_pressed()[0] == 0:
+            self.clicked= False
+
         DISPLAYSURF.blit(self.image, (self.rect.x, self.rect.y))
+        return state
+
 
 big_button = Button (75, 25, click4)
 start_button = Button(100, 275, click1)
@@ -68,17 +81,23 @@ while run:
     DISPLAYSURF.blit(menu_background, (0, 0))
 
     big_button.draw()
-    start_button.draw()
-    multi_button.draw()
-    score_button.draw()
+    if start_button.draw():
+        print('start')
+    if multi_button.draw():
+        print('multi')
+    if score_button.draw():
+        print('score')
 
     # check collision and change colour
     col = GREEN
+    
     # if weapon.collidelist(obstacles) >= 0 and pygame.mouse.get_pressed(num_buttons=1)[0]:
-    if weapon.collidelist(obstacles) >= 0 and pygame.mouse.get_pressed()[0]:
-        # print("colide")
-        col = RED
-        obstacles.pop()
+    if weapon.collidelist(obstacles) >= 0:
+        if pygame.mouse.get_pressed()[0]:
+            # print("colide")
+            col = RED
+            
+            #obstacles.pop()
 
     # get mouse coordinates and use them to position the rectangle
     pos = pygame.mouse.get_pos()
