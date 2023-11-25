@@ -3,8 +3,8 @@ import random
 
 # UI STATE
 show_menu = True
-show_highscore = False
 show_game = False
+show_highscore = False
 
 
 
@@ -17,12 +17,13 @@ DISPLAYSURF = pygame.display.set_mode((400, 600))
 pygame.display.set_caption("Jogo De Toupeiras")
 
 # create cursor_weapon
-image = pygame.image.load("mallet.png").convert_alpha()
+image = pygame.image.load("hammer.png").convert_alpha()
+#image = pygame. transform. scale(image,1, 2)
 weapon = image.get_rect()
 
 # create empty list, then create X obstacle rectangles using a loop and add to list
 obstacles = []
-for _ in range(0):
+for _ in range(36):
     obstacle_rect = pygame.Rect(random.randint(
         0, 400), random.randint(0, 600), 25, 25)
     obstacles.append(obstacle_rect)
@@ -77,27 +78,36 @@ score_button = Button(100, 475, click3)
 
 run = True
 while run:
-    # update background
-    DISPLAYSURF.blit(menu_background, (0, 0))
 
-    big_button.draw()
-    if start_button.draw():
-        print('start')
-    if multi_button.draw():
-        print('multi')
-    if score_button.draw():
-        print('score')
+    #shows menu
+    if show_menu == True:
+        # update background
+        DISPLAYSURF.blit(menu_background, (0, 0))
+
+        big_button.draw()
+        if start_button.draw():
+            print('start')
+            show_menu = False
+            show_game = True
+        if multi_button.draw():
+            print('multi')
+        if score_button.draw():
+            print('score')
 
     # check collision and change colour
     col = GREEN
-    
-    # if weapon.collidelist(obstacles) >= 0 and pygame.mouse.get_pressed(num_buttons=1)[0]:
-    if weapon.collidelist(obstacles) >= 0:
-        if pygame.mouse.get_pressed()[0]:
-            # print("colide")
-            col = RED
-            
-            #obstacles.pop()
+    if show_game == True:
+
+        DISPLAYSURF.blit(menu_background, (0, 0))
+        # if weapon.collidelist(obstacles) >= 0 and pygame.mouse.get_pressed(num_buttons=1)[0]:
+        if weapon.collidelist(obstacles) >= 0:
+            if pygame.mouse.get_pressed()[0]:
+                # print("colide")
+                 col = RED
+                #obstacles.pop()
+
+        for obstacle in obstacles:
+            pygame.draw.rect(DISPLAYSURF, col, obstacle)
 
     # get mouse coordinates and use them to position the rectangle
     pos = pygame.mouse.get_pos()
@@ -106,8 +116,7 @@ while run:
     # draw all rectangles
     # blit the image onto the DISPLAYSURF
     DISPLAYSURF.blit(image, weapon.topleft)
-    for obstacle in obstacles:
-        pygame.draw.rect(DISPLAYSURF, col, obstacle)
+   
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
