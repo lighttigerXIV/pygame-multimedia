@@ -23,7 +23,7 @@ weapon = image.get_rect()
 
 # create empty list, then create X obstacle rectangles using a loop and add to list
 obstacles = []
-for _ in range(36):
+for _ in range(5):
     obstacle_rect = pygame.Rect(random.randint(
         0, 400), random.randint(0, 600), 25, 25)
     obstacles.append(obstacle_rect)
