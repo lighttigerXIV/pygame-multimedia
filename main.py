@@ -1,148 +1,51 @@
 import pygame
-import random
+import screens.Display as Display
+import screens.MenuScreen as MenuScreen
+import screens.SingleplayerScreen as SingleplayerScreen
+from Utils import get_image
 
-# UI STATE
-show_menu = True
-show_game = False
-show_multiplayer_game = False
-show_highscore = False
-
-
-
-
-
+display_state = Display.State()
+singleplayer_screen = SingleplayerScreen.SinglePlayerScreen()
 
 pygame.init()
-DISPLAYSURF = pygame.display.set_mode((400, 600))
-# game name
-pygame.display.set_caption("Jogo De Toupeiras")
+DISPLAY_SURFACE = pygame.display.set_mode((400, 600))
+pygame.display.set_caption("Whack A Diglett")
 
-# create cursor_weapon
-image = pygame.image.load("hammer.png").convert_alpha()
-#image = pygame. transform. scale(image,1, 2)
-weapon = image.get_rect()
-
-# create empty list, then create X obstacle rectangles using a loop and add to list
-obstacles = []
-for _ in range(5):
-    dig = pygame.image.load("obstacle.png").convert_alpha()
-    obstacle_rect = dig
-    obstacle_rect = dig.get_rect()
-    obstacle_rect.topleft = (random.randint(100, 300), random.randint(100, 500))
-    obstacles.append(obstacle_rect)
-
-# define colours
-
-GREEN = (0, 255, 0)
-RED = (255, 0, 0)
-BLUE = (0, 0, 255)
-WHITE = (255, 255, 255)
-
-# hide cursor
+cursor_image = get_image("hammer.png")
+weapon = cursor_image.get_rect()
 pygame.mouse.set_visible(False)
-
-# background
-
-DISPLAYSURF.fill(WHITE)
-menu_background = pygame.image.load("menu_background.jpg")
-menu_background = pygame.transform.scale(menu_background, (600, 800))
-
-# button class for menu
-click1 = pygame.image.load("button_single.png").convert_alpha()
-click2 = pygame.image.load("button_multiplayer.png").convert_alpha()
-click3 = pygame.image.load("button_highscore.png").convert_alpha()
-click4 = pygame.image.load("red.png").convert_alpha()
-class Button():
-    def __init__(self, x, y, image):
-        self.image = image
-        self.rect = self.image.get_rect()
-        self.rect.topleft = (x, y)
-        self.clicked = False
-
-    def draw(self):
-        state = False
-        posa = pygame.mouse.get_pos()
-
-        if self.rect.collidepoint(posa):
-            if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
-                self.clicked = True
-                state = True
-        if pygame.mouse.get_pressed()[0] == 0:
-            self.clicked= False
-
-        DISPLAYSURF.blit(self.image, (self.rect.x, self.rect.y))
-        return state
-
-
-big_button = Button (75, 25, click4)
-start_button = Button(100, 275, click1)
-multi_button = Button(100, 375, click2)
-score_button = Button(100, 475, click3)
 
 run = True
 while run:
 
-    #shows menu
-    if show_menu == True:
-        # update background
-        DISPLAYSURF.blit(menu_background, (0, 0))
+    if display_state.show_menu:
+        MenuScreen.draw_screen(DISPLAY_SURFACE)
 
-        big_button.draw()
-        if start_button.draw():
-            print('start')
-            show_menu = False
-            show_game = True
-        if multi_button.draw():
-            show_menu = False
-            show_game = True
-            show_multiplayer_game = True
-            print('multi')
-        if score_button.draw():
-            print('score')
+    if display_state.show_singleplayer:
+        singleplayer_screen.draw_screen(DISPLAY_SURFACE)
 
-    # check collision and change colour
-    #col = GREEN
-    if show_game == True:
+    weapon.center = pygame.mouse.get_pos()
 
-        DISPLAYSURF.blit(menu_background, (0, 0))
-
-        for obstacle_rect in obstacles:
-            DISPLAYSURF.blit(dig, obstacle_rect.topleft)
-            #pygame.draw.rect(DISPLAYSURF, obstacle)
-
-
-        # if weapon.collidelist(obstacles) >= 0 and pygame.mouse.get_pressed(num_buttons=1)[0]:
-        if weapon.collidelist(obstacles) >= 0:
-            if pygame.mouse.get_pressed()[2]:
-                # print("colide")
-                #col = RED
-                obstacles.pop()
-
-        
-
-    # get mouse coordinates and use them to position the rectangle
-    pos = pygame.mouse.get_pos()
-    weapon.center = pos
-
-    # draw all rectangles
-    # blit the image onto the DISPLAYSURF
-    if not show_multiplayer_game:
-       DISPLAYSURF.blit(image, weapon.topleft)
-   
+    if not display_state.show_multiplayer:
+        DISPLAY_SURFACE.blit(cursor_image, weapon.topleft)
 
     events = pygame.event.get()
-    
+
     for event in events:
         if event.type == pygame.QUIT:
             run = False
+
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
-                show_game = False
-                show_multiplayer_game = False
-                show_highscore = False
-                show_menu = True
+                display_state.go_to_menu_screen()
 
-        if show_multiplayer_game:
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            pointer_position = pygame.mouse.get_pos()
+
+            if display_state.show_menu:
+                display_state.go_to_singleplayer_screen()
+
+        if display_state.show_multiplayer:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_1:
                     print("Tecla 1")
@@ -180,9 +83,7 @@ while run:
                     print("Tecla Numpad 8")
                 if event.key == pygame.K_KP9:
                     print("Tecla Numpad 9")
-        
 
-    # update display
     pygame.display.update()
 
 pygame.quit()
