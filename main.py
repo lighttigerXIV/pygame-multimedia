@@ -24,8 +24,10 @@ weapon = image.get_rect()
 # create empty list, then create X obstacle rectangles using a loop and add to list
 obstacles = []
 for _ in range(5):
-    obstacle_rect = pygame.Rect(random.randint(
-        0, 400), random.randint(0, 600), 25, 25)
+    dig = pygame.image.load("obstacle.png").convert_alpha()
+    obstacle_rect = dig
+    obstacle_rect = dig.get_rect()
+    obstacle_rect.topleft = (random.randint(0, 400), random.randint(0, 600))
     obstacles.append(obstacle_rect)
 
 # define colours
@@ -95,19 +97,24 @@ while run:
             print('score')
 
     # check collision and change colour
-    col = GREEN
+    #col = GREEN
     if show_game == True:
 
         DISPLAYSURF.blit(menu_background, (0, 0))
+
+        for obstacle_rect in obstacles:
+            DISPLAYSURF.blit(dig, obstacle_rect.topleft)
+            #pygame.draw.rect(DISPLAYSURF, obstacle)
+
+
         # if weapon.collidelist(obstacles) >= 0 and pygame.mouse.get_pressed(num_buttons=1)[0]:
         if weapon.collidelist(obstacles) >= 0:
             if pygame.mouse.get_pressed()[0]:
                 # print("colide")
-                 col = RED
-                #obstacles.pop()
+                #col = RED
+                obstacles.pop()
 
-        for obstacle in obstacles:
-            pygame.draw.rect(DISPLAYSURF, col, obstacle)
+        
 
     # get mouse coordinates and use them to position the rectangle
     pos = pygame.mouse.get_pos()
