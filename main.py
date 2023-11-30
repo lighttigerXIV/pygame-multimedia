@@ -4,6 +4,7 @@ import random
 # UI STATE
 show_menu = True
 show_game = False
+show_multiplayer_game = False
 show_highscore = False
 
 
@@ -92,6 +93,9 @@ while run:
             show_menu = False
             show_game = True
         if multi_button.draw():
+            show_menu = False
+            show_game = True
+            show_multiplayer_game = True
             print('multi')
         if score_button.draw():
             print('score')
@@ -125,9 +129,51 @@ while run:
     DISPLAYSURF.blit(image, weapon.topleft)
    
 
-    for event in pygame.event.get():
+    events = pygame.event.get()
+    
+    for event in events:
         if event.type == pygame.QUIT:
             run = False
+            
+        if show_multiplayer_game:
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_1:
+                    print("Tecla 1")
+                if event.key == pygame.K_2:
+                    print("Tecla 2")
+                if event.key == pygame.K_3:
+                    print("Tecla 3")
+                if event.key == pygame.K_4:
+                    print("Tecla 4")
+                if event.key == pygame.K_5:
+                    print("Tecla 5")
+                if event.key == pygame.K_6:
+                    print("Tecla 6")
+                if event.key == pygame.K_7:
+                    print("Tecla 7")
+                if event.key == pygame.K_8:
+                    print("Tecla 8")
+                if event.key == pygame.K_9:
+                    print("Tecla 9")
+                if event.key == pygame.K_KP1:
+                    print("Tecla Numpad 1")
+                if event.key == pygame.K_KP2:
+                    print("Tecla Numpad 2")
+                if event.key == pygame.K_KP3:
+                    print("Tecla Numpad 3")
+                if event.key == pygame.K_KP4:
+                    print("Tecla Numpad 4")
+                if event.key == pygame.K_KP5:
+                    print("Tecla Numpad 5")
+                if event.key == pygame.K_KP6:
+                    print("Tecla Numpad 6")
+                if event.key == pygame.K_KP7:
+                    print("Tecla Numpad 7")
+                if event.key == pygame.K_KP8:
+                    print("Tecla Numpad 8")
+                if event.key == pygame.K_KP9:
+                    print("Tecla Numpad 9")
+        
 
     # update display
     pygame.display.update()
