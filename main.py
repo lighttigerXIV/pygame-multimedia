@@ -27,7 +27,7 @@ for _ in range(5):
     dig = pygame.image.load("obstacle.png").convert_alpha()
     obstacle_rect = dig
     obstacle_rect = dig.get_rect()
-    obstacle_rect.topleft = (random.randint(0, 400), random.randint(0, 600))
+    obstacle_rect.topleft = (random.randint(100, 300), random.randint(100, 500))
     obstacles.append(obstacle_rect)
 
 # define colours
@@ -109,7 +109,7 @@ while run:
 
         # if weapon.collidelist(obstacles) >= 0 and pygame.mouse.get_pressed(num_buttons=1)[0]:
         if weapon.collidelist(obstacles) >= 0:
-            if pygame.mouse.get_pressed()[0]:
+            if pygame.mouse.get_pressed()[2]:
                 # print("colide")
                 #col = RED
                 obstacles.pop()
