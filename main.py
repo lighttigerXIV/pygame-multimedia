@@ -126,7 +126,8 @@ while run:
 
     # draw all rectangles
     # blit the image onto the DISPLAYSURF
-    DISPLAYSURF.blit(image, weapon.topleft)
+    if not show_multiplayer_game:
+       DISPLAYSURF.blit(image, weapon.topleft)
    
 
     events = pygame.event.get()
@@ -134,7 +135,13 @@ while run:
     for event in events:
         if event.type == pygame.QUIT:
             run = False
-            
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                show_game = False
+                show_multiplayer_game = False
+                show_highscore = False
+                show_menu = True
+
         if show_multiplayer_game:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_1:
