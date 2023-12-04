@@ -9,7 +9,7 @@ class SinglePlayerScreen:
         self.score = score
 
     class Components:
-        background = get_image("menu_background.jpg")
+        background = get_image("game_background.png")
         background = pygame.transform.scale(background, (400, 600))
 
         first_hole = get_image("dirt.png")
