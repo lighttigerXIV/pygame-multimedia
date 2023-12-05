@@ -43,7 +43,7 @@ while run:
             pointer_position = pygame.mouse.get_pos()
 
             if display_state.show_menu:
-                display_state.go_to_singleplayer_screen()
+                MenuScreen.on_mouse_click(pointer_position, display_state)
 
         if display_state.show_multiplayer:
             if event.type == pygame.KEYDOWN:
