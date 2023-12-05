@@ -92,15 +92,15 @@ class SinglePlayerScreen:
     def move_diglett(self):
 
         if self.move_diglett_up:
-            self.diglett_y_offset -= 2
+            self.diglett_y_offset -= 1.7
 
         elif not self.move_diglett_up:
-            self.diglett_y_offset += 2
+            self.diglett_y_offset += 1.7
 
-        if self.diglett_y_offset == -50:
+        if int(self.diglett_y_offset) <= -50:
             self.move_diglett_up = False
 
-        elif self.diglett_y_offset == 0:
+        elif int(self.diglett_y_offset) >= 0:
             self.move_diglett_up = True
             self.spawn_new_diglett = True
 
