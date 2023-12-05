@@ -8,6 +8,7 @@ class SinglePlayerScreen:
     def __init__(self, display, surface, font):
         self.score = 0
         self.hearts = 5
+        self.combo = 0
         self.diglett_hole_position = -1
         self.diglett_y_offset = 0
         self.move_diglett_up = True
@@ -30,6 +31,9 @@ class SinglePlayerScreen:
 
         diglett = get_image("diglett.png")
         diglett_rect = diglett.get_rect()
+
+        black_diglett = get_image("black_diglett.png")
+        black_diglett_rect = black_diglett.get_rect()
 
     def move_diglett(self):
 
@@ -84,12 +88,12 @@ class SinglePlayerScreen:
             pointer_position
     ):
 
-        print("Entrou")
-
         if self.Components.diglett_rect.collidepoint(pointer_position):
-            self.score += 10
+            self.combo += 1
+            self.score += self.combo
         else:
             self.hearts -= 1
+            self.combo = 0
 
             if self.hearts == 0:
                 self.gameover()
