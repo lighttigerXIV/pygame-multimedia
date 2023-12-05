@@ -1,7 +1,7 @@
 import pygame
 import screens.Display
 from pygame import Surface, SurfaceType
-from Utils import get_image
+from Utils import get_image, get_music_path
 
 
 class MenuScreen:
@@ -9,6 +9,15 @@ class MenuScreen:
     def __init__(self, display, surface):
         self.display = display
         self.surface = surface
+
+    def init_screen(self):
+        if not pygame.mixer.get_init():
+            pygame.mixer.init()
+
+        pygame.mixer.stop()
+        pygame.mixer.music.load(self.Components.menu_music)
+        pygame.mixer.music.set_volume(0.1)
+        pygame.mixer_music.play(True)
 
     class Components:
         background = get_image("menu_background.jpg")
@@ -27,6 +36,8 @@ class MenuScreen:
         highscore_button = get_image("button_highscore.png")
         highscore_button_rect = highscore_button.get_rect()
         highscore_button_rect.topleft = (100, 475)
+
+        menu_music = get_music_path("menu.wav")
 
     def on_mouse_click(
             self,

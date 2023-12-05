@@ -1,7 +1,8 @@
 import pygame
 import random
+from enum import Enum
 
-from Utils import get_image, get_sfx
+from Utils import get_image, get_sfx, get_music_path
 
 
 class SinglePlayerScreen:
@@ -16,6 +17,16 @@ class SinglePlayerScreen:
         self.display = display
         self.surface = surface
         self.font = font
+        self.current_diglett = self.DiglettType.NORMAL
+
+    def init_screen(self):
+        if not pygame.mixer.get_init():
+            pygame.mixer.init()
+
+        pygame.mixer.stop()
+        pygame.mixer.music.load(self.Components.game_music)
+        pygame.mixer.music.set_volume(0.1)
+        pygame.mixer_music.play(True)
 
     hole_positions = [(68, 254), (188, 344), (315, 240), (68, 410), (198, 456), (323, 398), (68, 540), (188, 588),
                       (323, 556)]  # x, y
@@ -41,6 +52,19 @@ class SinglePlayerScreen:
 
         woosh_sfx = get_sfx("woosh.wav")
         woosh_sfx.set_volume(0.2)
+
+        game_music = get_music_path("game.wav")
+
+    class DiglettType(Enum):
+        NORMAL = 0
+        NORMAL_HIT = 1
+        SHINY = 2
+        SHINY_HIT = 3
+        HEAL = 4
+        HEAL_HIT = 5
+        BOMB = 6
+        BOMB_HIT = 7
+
 
     def move_diglett(self):
 
@@ -97,7 +121,6 @@ class SinglePlayerScreen:
     ):
 
         self.Components.woosh_sfx.play()
-
 
         if self.Components.diglett_rect.collidepoint(pointer_position):
             self.combo += 1

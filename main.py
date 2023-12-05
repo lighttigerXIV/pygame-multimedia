@@ -1,20 +1,12 @@
 import pygame
 import screens.Display as Display
-import screens.MenuScreen as MenuScreen
-import screens.SingleplayerScreen as SingleplayerScreen
 from Utils import get_image
 
-display = Display.Display()
-surface = pygame.display.set_mode((400, 600))
 
 pygame.init()
+display = Display.Display()
 
-font = pygame.font.SysFont("arial", 60)
-fps = pygame.time.Clock()
 pygame.display.set_caption("Whack A Diglett")
-
-menu_screen = MenuScreen.MenuScreen(display, surface)
-singleplayer_screen = SingleplayerScreen.SinglePlayerScreen(display, surface, font)
 
 cursor_image = get_image("hammer.png")
 weapon = cursor_image.get_rect()
@@ -24,15 +16,15 @@ run = True
 while run:
 
     if display.show_menu:
-        menu_screen.draw_screen()
+        display.menu_screen.draw_screen()
 
     if display.show_singleplayer:
-        singleplayer_screen.draw_screen()
+        display.singleplayer_screen.draw_screen()
 
     weapon.center = pygame.mouse.get_pos()
 
     if not display.show_multiplayer:
-        surface.blit(cursor_image, weapon.topleft)
+        display.surface.blit(cursor_image, weapon.topleft)
 
     events = pygame.event.get()
 
@@ -44,7 +36,7 @@ while run:
             if event.key == pygame.K_ESCAPE:
 
                 if display.show_singleplayer:
-                    singleplayer_screen.gameover()
+                    display.singleplayer_screen.gameover()
 
                 display.go_to_menu_screen()
 
@@ -52,10 +44,10 @@ while run:
             pointer_position = pygame.mouse.get_pos()
 
             if display.show_menu:
-                menu_screen.on_mouse_click(pointer_position)
+                display.menu_screen.on_mouse_click(pointer_position)
 
             elif display.show_singleplayer:
-                singleplayer_screen.on_mouse_click(pointer_position)
+                display.singleplayer_screen.on_mouse_click(pointer_position)
 
         if display.show_multiplayer:
             if event.type == pygame.KEYDOWN:
@@ -97,6 +89,6 @@ while run:
                     print("Tecla Numpad 9")
 
     pygame.display.update()
-    fps.tick(60)
+    display.fps.tick(60)
 
 pygame.quit()
