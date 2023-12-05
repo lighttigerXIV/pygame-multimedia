@@ -4,12 +4,16 @@ import screens.MenuScreen as MenuScreen
 import screens.SingleplayerScreen as SingleplayerScreen
 from Utils import get_image
 
-display_state = Display.State()
-singleplayer_screen = SingleplayerScreen.SinglePlayerScreen()
+display = Display.Display()
+surface = pygame.display.set_mode((400, 600))
 
 pygame.init()
-DISPLAY_SURFACE = pygame.display.set_mode((400, 600))
+font = pygame.font.SysFont("arial", 60)
+fps = pygame.time.Clock()
 pygame.display.set_caption("Whack A Diglett")
+
+menu_screen = MenuScreen.MenuScreen(display, surface)
+singleplayer_screen = SingleplayerScreen.SinglePlayerScreen(display, surface, font)
 
 cursor_image = get_image("hammer.png")
 weapon = cursor_image.get_rect()
@@ -18,16 +22,16 @@ pygame.mouse.set_visible(False)
 run = True
 while run:
 
-    if display_state.show_menu:
-        MenuScreen.draw_screen(DISPLAY_SURFACE)
+    if display.show_menu:
+        menu_screen.draw_screen()
 
-    if display_state.show_singleplayer:
-        singleplayer_screen.draw_screen(DISPLAY_SURFACE)
+    if display.show_singleplayer:
+        singleplayer_screen.draw_screen()
 
     weapon.center = pygame.mouse.get_pos()
 
-    if not display_state.show_multiplayer:
-        DISPLAY_SURFACE.blit(cursor_image, weapon.topleft)
+    if not display.show_multiplayer:
+        surface.blit(cursor_image, weapon.topleft)
 
     events = pygame.event.get()
 
@@ -37,15 +41,22 @@ while run:
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
-                display_state.go_to_menu_screen()
+
+                if display.show_singleplayer:
+                    singleplayer_screen.gameover()
+
+                display.go_to_menu_screen()
 
         if event.type == pygame.MOUSEBUTTONDOWN:
             pointer_position = pygame.mouse.get_pos()
 
-            if display_state.show_menu:
-                MenuScreen.on_mouse_click(pointer_position, display_state)
+            if display.show_menu:
+                menu_screen.on_mouse_click(pointer_position)
 
-        if display_state.show_multiplayer:
+            elif display.show_singleplayer:
+                singleplayer_screen.on_mouse_click(pointer_position)
+
+        if display.show_multiplayer:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_1:
                     print("Tecla 1")
@@ -85,5 +96,6 @@ while run:
                     print("Tecla Numpad 9")
 
     pygame.display.update()
+    fps.tick(60)
 
 pygame.quit()

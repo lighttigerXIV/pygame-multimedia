@@ -1,4 +1,4 @@
-class State:
+class Display:
     def __init__(self, show_menu=True, show_singleplayer=False, show_multiplayer=False, show_highscore=False):
         self.show_menu = show_menu
         self.show_singleplayer = show_singleplayer

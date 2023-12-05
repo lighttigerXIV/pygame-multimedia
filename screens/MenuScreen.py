@@ -5,6 +5,11 @@ from Utils import get_image
 
 
 class MenuScreen:
+
+    def __init__(self, display, surface):
+        self.display = display
+        self.surface = surface
+
     class Components:
         background = get_image("menu_background.jpg")
         background = pygame.transform.scale(background, (400, 600))
@@ -23,21 +28,16 @@ class MenuScreen:
         highscore_button_rect = highscore_button.get_rect()
         highscore_button_rect.topleft = (100, 475)
 
+    def on_mouse_click(
+            self,
+            pointer_position
+    ):
+        if MenuScreen.Components.singleplayer_button_rect.collidepoint(pointer_position):
+            self.display.go_to_singleplayer_screen()
 
-def on_mouse_click(
-        pointer_position,
-        display_state: screens.Display.State
-):
-    if MenuScreen.Components.singleplayer_button_rect.collidepoint(pointer_position):
-        print("Entrou aqui")
-        display_state.go_to_singleplayer_screen()
-
-
-def draw_screen(
-        display_surface: Surface | SurfaceType
-):
-    display_surface.blit(MenuScreen.Components.background, (0, 0))
-    display_surface.blit(MenuScreen.Components.menu_art, (75, 75))
-    display_surface.blit(MenuScreen.Components.singleplayer_button, (100, 275))
-    display_surface.blit(MenuScreen.Components.multiplayer_button, (100, 375))
-    display_surface.blit(MenuScreen.Components.highscore_button, (100, 475))
+    def draw_screen(self):
+        self.surface.blit(MenuScreen.Components.background, (0, 0))
+        self.surface.blit(MenuScreen.Components.menu_art, (75, 75))
+        self.surface.blit(MenuScreen.Components.singleplayer_button, (100, 275))
+        self.surface.blit(MenuScreen.Components.multiplayer_button, (100, 375))
+        self.surface.blit(MenuScreen.Components.highscore_button, (100, 475))
