@@ -48,7 +48,7 @@ class MenuScreen:
 
     def draw_screen(self):
         self.surface.blit(MenuScreen.Components.background, (0, 0))
-        self.surface.blit(MenuScreen.Components.menu_art, (75, 75))
+        self.surface.blit(MenuScreen.Components.menu_art, (75, 50))
         self.surface.blit(MenuScreen.Components.singleplayer_button, (100, 275))
         self.surface.blit(MenuScreen.Components.multiplayer_button, (100, 375))
         self.surface.blit(MenuScreen.Components.highscore_button, (100, 475))

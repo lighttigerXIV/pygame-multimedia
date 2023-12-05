@@ -17,7 +17,7 @@ class SinglePlayerScreen:
         self.display = display
         self.surface = surface
         self.font = font
-        self.current_diglett = self.DiglettType.NORMAL
+        self.diglett_type = self.DiglettType.NORMAL
 
     def init_screen(self):
         if not pygame.mixer.get_init():
@@ -44,14 +44,38 @@ class SinglePlayerScreen:
         diglett = get_image("diglett.png")
         diglett_rect = diglett.get_rect()
 
-        black_diglett = get_image("black_diglett.png")
-        black_diglett_rect = black_diglett.get_rect()
+        hit_diglett = get_image("hit_diglett.png")
+        hit_diglett_rect = hit_diglett.get_rect()
+
+        shiny_diglett = get_image("shiny_diglett.png")
+        shiny_diglett_rect = shiny_diglett.get_rect()
+
+        hit_shiny_diglett = get_image("hit_shiny_diglett.png")
+        hit_shiny_diglett_rect = hit_shiny_diglett.get_rect()
+
+        bomb_diglett = get_image("bomb_diglett.png")
+        bomb_diglett_rect = bomb_diglett.get_rect()
+
+        hit_bomb_diglett = get_image("hit_bomb_diglett.png")
+        hit_bomb_diglett_rect = hit_bomb_diglett.get_rect()
+
+        healing_diglett = get_image("healing_diglett.png")
+        healing_diglett_rect = healing_diglett.get_rect()
+
+        hit_healing_diglett = get_image("hit_healing_diglett.png")
+        hit_healing_diglett_rect = hit_healing_diglett.get_rect()
 
         diglett_cry = get_sfx("diglett_cry.wav")
-        diglett_cry.set_volume(0.3)
+        diglett_cry.set_volume(0.2)
 
         woosh_sfx = get_sfx("woosh.wav")
         woosh_sfx.set_volume(0.2)
+
+        bomb_sfx = get_sfx("bomb.wav")
+        bomb_sfx.set_volume(0.8)
+
+        life_sfx = get_sfx("life.wav")
+        life_sfx.set_volume(0.2)
 
         game_music = get_music_path("game.wav")
 
@@ -60,11 +84,10 @@ class SinglePlayerScreen:
         NORMAL_HIT = 1
         SHINY = 2
         SHINY_HIT = 3
-        HEAL = 4
-        HEAL_HIT = 5
+        HEALING = 4
+        HEALING_HIT = 5
         BOMB = 6
         BOMB_HIT = 7
-
 
     def move_diglett(self):
 
@@ -86,10 +109,57 @@ class SinglePlayerScreen:
 
         x, y = self.hole_positions[self.diglett_hole_position]
 
-        self.surface.blit(self.Components.diglett, self.Components.diglett_rect)
-        self.Components.diglett_rect.center = (x, y + self.diglett_y_offset)
+        if self.diglett_type == self.DiglettType.NORMAL:
+            self.surface.blit(self.Components.diglett, self.Components.diglett_rect)
+            self.Components.diglett_rect.center = (x, y + self.diglett_y_offset)
+
+        if self.diglett_type == self.DiglettType.NORMAL_HIT:
+            self.surface.blit(self.Components.hit_diglett, self.Components.hit_diglett_rect)
+            self.Components.hit_diglett_rect.center = (x, y + self.diglett_y_offset)
+
+        if self.diglett_type == self.DiglettType.SHINY:
+            self.surface.blit(self.Components.shiny_diglett, self.Components.shiny_diglett_rect)
+            self.Components.shiny_diglett_rect.center = (x, y + self.diglett_y_offset)
+
+        if self.diglett_type == self.DiglettType.SHINY_HIT:
+            self.surface.blit(self.Components.hit_shiny_diglett, self.Components.hit_shiny_diglett_rect)
+            self.Components.hit_shiny_diglett_rect.center = (x, y + self.diglett_y_offset)
+
+        if self.diglett_type == self.DiglettType.HEALING:
+            self.surface.blit(self.Components.healing_diglett, self.Components.healing_diglett_rect)
+            self.Components.healing_diglett_rect.center = (x, y + self.diglett_y_offset)
+
+        if self.diglett_type == self.DiglettType.HEALING_HIT:
+            self.surface.blit(self.Components.hit_healing_diglett, self.Components.hit_healing_diglett_rect)
+            self.Components.hit_healing_diglett_rect.center = (x, y + self.diglett_y_offset)
+
+        if self.diglett_type == self.DiglettType.BOMB:
+            self.surface.blit(self.Components.bomb_diglett, self.Components.bomb_diglett_rect)
+            self.Components.bomb_diglett_rect.center = (x, y + self.diglett_y_offset)
+
+        if self.diglett_type == self.DiglettType.BOMB_HIT:
+            self.surface.blit(self.Components.hit_bomb_diglett, self.Components.hit_bomb_diglett_rect)
+            self.Components.hit_bomb_diglett_rect.center = (x, y + self.diglett_y_offset)
 
         if self.spawn_new_diglett:
+
+            random_diglett = random.randint(1, 100)
+
+            if random_diglett in range(1, 79):
+                self.diglett_type = self.DiglettType.NORMAL
+
+            if random_diglett == 80:
+                self.diglett_type = self.DiglettType.SHINY
+
+            if random_diglett in range(81, 90):
+                if self.hearts < 5:
+                    self.diglett_type = self.DiglettType.HEALING
+                else:
+                    self.diglett_type = self.DiglettType.NORMAL
+
+            if random_diglett in range(91, 100):
+                self.diglett_type = self.DiglettType.BOMB
+
             self.diglett_hole_position = random.randint(0, 8)
             self.spawn_new_diglett = False
 
@@ -125,7 +195,39 @@ class SinglePlayerScreen:
         if self.Components.diglett_rect.collidepoint(pointer_position):
             self.combo += 1
             self.score += self.combo
+
+            self.Components.diglett_rect.center = (-100, -100)
+
             self.Components.diglett_cry.play()
+            self.diglett_type = self.DiglettType.NORMAL_HIT
+
+        elif self.Components.shiny_diglett_rect.collidepoint(pointer_position):
+            self.combo += 1
+            self.score += self.combo + 100
+
+            self.Components.shiny_diglett_rect.center = (-100, -100)
+
+            self.Components.diglett_cry.play()
+            self.diglett_type = self.DiglettType.SHINY_HIT
+
+        elif self.Components.bomb_diglett_rect.collidepoint(pointer_position):
+            self.hearts -= 1
+
+            self.Components.bomb_diglett_rect.center = (-100, -100)
+
+            self.Components.bomb_sfx.play()
+            self.diglett_type = self.DiglettType.BOMB_HIT
+
+        elif self.Components.healing_diglett_rect.collidepoint(pointer_position):
+            self.hearts += 1
+            self.combo += 1
+            self.score += self.combo
+
+            self.Components.healing_diglett_rect.center = (-100, -100)
+
+            self.Components.life_sfx.play()
+            self.diglett_type = self.DiglettType.HEALING_HIT
+
         else:
             self.hearts -= 1
             self.combo = 0
