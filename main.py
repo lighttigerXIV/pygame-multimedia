@@ -8,6 +8,7 @@ display = Display.Display()
 surface = pygame.display.set_mode((400, 600))
 
 pygame.init()
+
 font = pygame.font.SysFont("arial", 60)
 fps = pygame.time.Clock()
 pygame.display.set_caption("Whack A Diglett")

@@ -1,7 +1,7 @@
 import pygame
 import random
 
-from Utils import get_image
+from Utils import get_image, get_sfx
 
 
 class SinglePlayerScreen:
@@ -12,6 +12,7 @@ class SinglePlayerScreen:
         self.diglett_hole_position = -1
         self.diglett_y_offset = 0
         self.move_diglett_up = True
+        self.spawn_new_diglett = True
         self.display = display
         self.surface = surface
         self.font = font
@@ -35,6 +36,12 @@ class SinglePlayerScreen:
         black_diglett = get_image("black_diglett.png")
         black_diglett_rect = black_diglett.get_rect()
 
+        diglett_cry = get_sfx("diglett_cry.wav")
+        diglett_cry.set_volume(0.3)
+
+        woosh_sfx = get_sfx("woosh.wav")
+        woosh_sfx.set_volume(0.2)
+
     def move_diglett(self):
 
         if self.move_diglett_up:
@@ -48,7 +55,7 @@ class SinglePlayerScreen:
 
         elif self.diglett_y_offset == 0:
             self.move_diglett_up = True
-            self.diglett_hole_position = random.randint(0, 8)
+            self.spawn_new_diglett = True
 
     def draw_screen(self):
         self.surface.blit(self.Components.background, (0, 0))
@@ -58,8 +65,9 @@ class SinglePlayerScreen:
         self.surface.blit(self.Components.diglett, self.Components.diglett_rect)
         self.Components.diglett_rect.center = (x, y + self.diglett_y_offset)
 
-        if self.diglett_hole_position == -1:
-            self.diglett_hole_position = 8
+        if self.spawn_new_diglett:
+            self.diglett_hole_position = random.randint(0, 8)
+            self.spawn_new_diglett = False
 
         self.move_diglett()
 
@@ -88,9 +96,13 @@ class SinglePlayerScreen:
             pointer_position
     ):
 
+        self.Components.woosh_sfx.play()
+
+
         if self.Components.diglett_rect.collidepoint(pointer_position):
             self.combo += 1
             self.score += self.combo
+            self.Components.diglett_cry.play()
         else:
             self.hearts -= 1
             self.combo = 0
