@@ -3,6 +3,7 @@ from pygame import Surface, SurfaceType
 from pygame.font import Font
 
 from Utils import get_image, get_music_path
+from Constants import BLACK
 
 
 class GameOverScreen:
@@ -33,11 +34,11 @@ class GameOverScreen:
     def draw_screen(self):
         self.surface.blit(self.Components.background, (0, 0))
 
-        score_text = self.gameover_font.render("Gameover", True, (0, 0, 0))
-        self.surface.blit(score_text, score_text.get_rect(center=(200, 200)))
+        gameover_text = self.gameover_font.render("Gameover", True, BLACK)
+        self.surface.blit(gameover_text, gameover_text.get_rect(center=(200, 200)))
 
-        score_text = self.score_font.render(str(self.score), True, (0, 0, 0))
+        score_text = self.score_font.render(str(self.score), True, BLACK)
         self.surface.blit(score_text, score_text.get_rect(center=(200, 300)))
 
-        click_text = self.click_to_exit_font.render("Click anywhere to go to menu", True, (0, 0, 0))
+        click_text = self.click_to_exit_font.render("Click anywhere to go to menu", True, BLACK)
         self.surface.blit(click_text, click_text.get_rect(center=(200, 550)))

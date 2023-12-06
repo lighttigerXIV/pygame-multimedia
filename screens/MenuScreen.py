@@ -44,7 +44,7 @@ class MenuScreen:
             pointer_position
     ):
         if MenuScreen.Components.singleplayer_button_rect.collidepoint(pointer_position):
-            self.display.go_to_singleplayer_screen()
+            self.display.go_to_tutorial_one_screen()
 
     def draw_screen(self):
         self.surface.blit(MenuScreen.Components.background, (0, 0))

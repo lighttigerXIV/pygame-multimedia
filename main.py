@@ -18,6 +18,9 @@ while run:
     if display.show_menu:
         display.menu_screen.draw_screen()
 
+    if display.show_tutorial_one:
+        display.tutorial_one_screen.draw_screen()
+
     if display.show_singleplayer:
         display.singleplayer_screen.draw_screen()
 
@@ -48,6 +51,9 @@ while run:
 
             if display.show_menu:
                 display.menu_screen.on_mouse_click(pointer_position)
+
+            elif display.show_tutorial_one:
+                display.tutorial_one_screen.on_mouse_click()
 
             elif display.show_singleplayer:
                 display.singleplayer_screen.on_mouse_click(pointer_position)
