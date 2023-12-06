@@ -21,6 +21,9 @@ while run:
     if display.show_singleplayer:
         display.singleplayer_screen.draw_screen()
 
+    if display.show_gameover:
+        display.gameover_screen.draw_screen()
+
     weapon.center = pygame.mouse.get_pos()
 
     if not display.show_multiplayer:
@@ -48,6 +51,9 @@ while run:
 
             elif display.show_singleplayer:
                 display.singleplayer_screen.on_mouse_click(pointer_position)
+
+            elif display.show_gameover:
+                display.go_to_menu_screen()
 
         if display.show_multiplayer:
             if event.type == pygame.KEYDOWN:

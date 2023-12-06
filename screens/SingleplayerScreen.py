@@ -1,6 +1,7 @@
 import pygame
 import random
 from enum import Enum
+import json
 
 from Utils import get_image, get_sfx, get_music_path
 
@@ -218,6 +219,9 @@ class SinglePlayerScreen:
             self.Components.bomb_sfx.play()
             self.diglett_type = self.DiglettType.BOMB_HIT
 
+            if self.hearts == 0:
+                self.gameover()
+
         elif self.Components.healing_diglett_rect.collidepoint(pointer_position):
             self.hearts += 1
             self.combo += 1
@@ -236,5 +240,5 @@ class SinglePlayerScreen:
                 self.gameover()
 
     def gameover(self):
-        self.display.go_to_menu_screen()
+        self.display.go_to_gameover_screen(self.score)
         self.__init__(self.display, self.surface, self.font)

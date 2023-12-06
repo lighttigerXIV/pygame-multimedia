@@ -7,8 +7,8 @@ from Utils import get_image, get_music_path
 class MenuScreen:
 
     def __init__(self, display, surface):
-        self.display = display
-        self.surface = surface
+        self.display: screens.Display = display
+        self.surface: Surface | SurfaceType = surface
 
     def init_screen(self):
         if not pygame.mixer.get_init():
