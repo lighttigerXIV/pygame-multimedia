@@ -143,24 +143,17 @@ class SinglePlayerScreen:
             self.Components.hit_bomb_diglett_rect.center = (x, y + self.diglett_y_offset)
 
         if self.spawn_new_diglett:
+            population = [self.DiglettType.NORMAL, self.DiglettType.SHINY, self.DiglettType.HEALING,
+                          self.DiglettType.BOMB]
 
-            random_diglett = random.randint(1, 100)
+            weights = [0.79, 0.01, 0.1, 0.1]
 
-            if random_diglett in range(1, 79):
-                self.diglett_type = self.DiglettType.NORMAL
+            new_diglett = random.choices(population, weights, k=1)[0]
 
-            if random_diglett == 80:
-                self.diglett_type = self.DiglettType.SHINY
+            if new_diglett == self.DiglettType.HEALING and self.hearts == 5:
+                new_diglett = self.DiglettType.NORMAL
 
-            if random_diglett in range(81, 90):
-                if self.hearts < 5:
-                    self.diglett_type = self.DiglettType.HEALING
-                else:
-                    self.diglett_type = self.DiglettType.NORMAL
-
-            if random_diglett in range(91, 100):
-                self.diglett_type = self.DiglettType.BOMB
-
+            self.diglett_type = new_diglett
             self.diglett_hole_position = random.randint(0, 8)
             self.spawn_new_diglett = False
 
@@ -194,43 +187,35 @@ class SinglePlayerScreen:
         self.Components.woosh_sfx.play()
 
         if self.Components.diglett_rect.collidepoint(pointer_position):
+            self.diglett_type = self.DiglettType.NORMAL_HIT
+            self.Components.diglett_rect.center = (-1000, -1000)
             self.combo += 1
             self.score += self.combo
-
-            self.Components.diglett_rect.center = (-100, -100)
-
             self.Components.diglett_cry.play()
-            self.diglett_type = self.DiglettType.NORMAL_HIT
 
         elif self.Components.shiny_diglett_rect.collidepoint(pointer_position):
+            self.diglett_type = self.DiglettType.SHINY_HIT
+            self.Components.shiny_diglett_rect.center = (-1000, -1000)
             self.combo += 1
             self.score += self.combo + 100
-
-            self.Components.shiny_diglett_rect.center = (-100, -100)
-
             self.Components.diglett_cry.play()
-            self.diglett_type = self.DiglettType.SHINY_HIT
-
-        elif self.Components.bomb_diglett_rect.collidepoint(pointer_position):
-            self.hearts -= 1
-
-            self.Components.bomb_diglett_rect.center = (-100, -100)
-
-            self.Components.bomb_sfx.play()
-            self.diglett_type = self.DiglettType.BOMB_HIT
-
-            if self.hearts == 0:
-                self.gameover()
 
         elif self.Components.healing_diglett_rect.collidepoint(pointer_position):
+            self.diglett_type = self.DiglettType.HEALING_HIT
+            self.Components.healing_diglett_rect.center = (-1000, -1000)
             self.hearts += 1
             self.combo += 1
             self.score += self.combo
-
-            self.Components.healing_diglett_rect.center = (-100, -100)
-
             self.Components.life_sfx.play()
-            self.diglett_type = self.DiglettType.HEALING_HIT
+
+        elif self.Components.bomb_diglett_rect.collidepoint(pointer_position):
+            self.diglett_type = self.DiglettType.BOMB_HIT
+            self.Components.bomb_diglett_rect.center = (-1000, -1000)
+            self.hearts -= 1
+            self.Components.bomb_sfx.play()
+
+            if self.hearts == 0:
+                self.gameover()
 
         else:
             self.hearts -= 1

@@ -148,24 +148,14 @@ class MultiPlayerScreen:
             self.Components.hit_bomb_diglett_rect.center = (x, y + self.diglett_y_offset)
 
         if self.spawn_new_diglett:
+            population = [self.DiglettType.NORMAL, self.DiglettType.SHINY, self.DiglettType.HEALING,
+                          self.DiglettType.BOMB]
 
-            random_diglett = random.randint(1, 100)
+            weights = [0.79, 0.01, 0.1, 0.1]
 
-            if random_diglett in range(1, 79):
-                self.diglett_type = self.DiglettType.NORMAL
+            new_diglett = random.choices(population, weights, k=1)[0]
 
-            if random_diglett == 80:
-                self.diglett_type = self.DiglettType.SHINY
-
-            if random_diglett in range(81, 90):
-                if self.first_player_hearts < 5:
-                    self.diglett_type = self.DiglettType.HEALING
-                else:
-                    self.diglett_type = self.DiglettType.NORMAL
-
-            if random_diglett in range(91, 100):
-                self.diglett_type = self.DiglettType.BOMB
-
+            self.diglett_type = new_diglett
             self.diglett_hole_position = random.randint(0, 8)
             self.spawn_new_diglett = False
 
@@ -254,18 +244,61 @@ class MultiPlayerScreen:
     def verify_collision(self, player: int, position: int):
 
         if position == self.diglett_hole_position:
-            if player == 1:
-                self.first_player_score += 1
-            else:
-                self.second_player_score += 1
+
+            if self.diglett_type == self.DiglettType.NORMAL:
+                self.diglett_type = self.DiglettType.NORMAL_HIT
+                self.Components.diglett_rect.center = (-1000, -1000)
+                self.Components.diglett_cry.play()
+
+                if player == 1:
+                    self.first_player_score += 1
+                else:
+                    self.second_player_score += 1
+
+            if self.diglett_type == self.DiglettType.SHINY:
+                self.diglett_type = self.DiglettType.SHINY_HIT
+                self.Components.shiny_diglett_rect.center = (-1000, -1000)
+                self.Components.diglett_cry.play()
+
+                if player == 1:
+                    self.first_player_score += 100
+                else:
+                    self.second_player_score += 100
+
+            if self.diglett_type == self.DiglettType.HEALING:
+                self.diglett_type = self.DiglettType.HEALING_HIT
+                self.Components.healing_diglett_rect.center = (-1000, -1000)
+                self.Components.life_sfx.play()
+
+                if player == 1:
+                    self.first_player_score += 1
+                    if self.first_player_hearts < 5:
+                        self.first_player_hearts += 1
+                else:
+                    self.second_player_score += 1
+                    if self.second_player_hearts < 5:
+                        self.second_player_hearts += 1
+
+            if self.diglett_type == self.DiglettType.BOMB:
+                self.diglett_type = self.DiglettType.BOMB_HIT
+                self.Components.bomb_diglett_rect.center = (-1000, -1000)
+                self.Components.bomb_sfx.play()
+
+                if player == 1:
+                    if self.first_player_hearts > 0:
+                        self.first_player_hearts -= 1
+                else:
+                    if self.second_player_hearts > 0:
+                        self.second_player_hearts -= 1
+
         else:
             if player == 1:
                 self.first_player_hearts -= 1
             else:
                 self.second_player_hearts -= 1
 
-            if self.first_player_hearts == 0 and self.second_player_hearts == 0:
-                self.gameover()
+        if self.first_player_hearts == 0 and self.second_player_hearts == 0:
+            self.gameover()
 
     def gameover(self):
         self.navigation.go_to_multiplayer_gameover_screen(self.first_player_score, self.second_player_score)
