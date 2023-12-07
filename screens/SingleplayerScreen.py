@@ -29,8 +29,8 @@ class SinglePlayerScreen:
         pygame.mixer.music.set_volume(0.1)
         pygame.mixer_music.play(True)
 
-    hole_positions = [(68, 254), (188, 344), (315, 240), (68, 410), (198, 456), (323, 398), (68, 540), (188, 588),
-                      (323, 556)]  # x, y
+    hole_positions = [(68, 258), (188, 344), (315, 238), (68, 412), (198, 458), (323, 398), (68, 542), (188, 590),
+                      (323, 557)]
 
     class Components:
         background = get_image("game_background.png")
