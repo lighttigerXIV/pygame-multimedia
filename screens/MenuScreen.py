@@ -1,5 +1,5 @@
 import pygame
-import screens.Display
+import screens.Navigation
 from pygame import Surface, SurfaceType
 from Utils import get_image, get_music_path
 
@@ -43,8 +43,11 @@ class MenuScreen:
             self,
             pointer_position
     ):
-        if MenuScreen.Components.singleplayer_button_rect.collidepoint(pointer_position):
+        if self.Components.singleplayer_button_rect.collidepoint(pointer_position):
             self.display.go_to_tutorial_one_screen()
+
+        if self.Components.multiplayer_button_rect.collidepoint(pointer_position):
+            self.display.go_to_tutorial_two_screen()
 
     def draw_screen(self):
         self.surface.blit(MenuScreen.Components.background, (0, 0))

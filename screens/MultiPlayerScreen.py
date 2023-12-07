@@ -1,21 +1,23 @@
-import pygame
 import random
 from enum import Enum
-import json
 
+import pygame
+
+from Constants import WHITE
 from Utils import get_image, get_sfx, get_music_path
 
 
-class SinglePlayerScreen:
-    def __init__(self, display, surface, font):
-        self.score = 0
-        self.hearts = 5
-        self.combo = 0
+class MultiPlayerScreen:
+    def __init__(self, navigation, surface, font):
+        self.first_player_score = 0
+        self.second_player_score = 0
+        self.first_player_hearts = 5
+        self.second_player_hearts = 5
         self.diglett_hole_position = -1
         self.diglett_y_offset = 0
         self.move_diglett_up = True
         self.spawn_new_diglett = True
-        self.display = display
+        self.navigation = navigation
         self.surface = surface
         self.font = font
         self.diglett_type = self.DiglettType.NORMAL
@@ -41,6 +43,9 @@ class SinglePlayerScreen:
 
         heart = get_image("heart.png")
         heart = pygame.transform.scale(heart, (30, 30))
+
+        blue_heart = get_image("heart_blue.png")
+        blue_heart = pygame.transform.scale(blue_heart, (30, 30))
 
         diglett = get_image("diglett.png")
         diglett_rect = diglett.get_rect()
@@ -153,7 +158,7 @@ class SinglePlayerScreen:
                 self.diglett_type = self.DiglettType.SHINY
 
             if random_diglett in range(81, 90):
-                if self.hearts < 5:
+                if self.first_player_hearts < 5:
                     self.diglett_type = self.DiglettType.HEALING
                 else:
                     self.diglett_type = self.DiglettType.NORMAL
@@ -168,77 +173,100 @@ class SinglePlayerScreen:
 
         self.surface.blit(self.Components.background_mask, (0, 0))
 
-        highscore_text = self.font.render(str(self.score), True, (255, 255, 255))
-        self.surface.blit(highscore_text, (20, 20))
+        first_player_score_text = self.font.render(str(self.first_player_score), True, WHITE)
+        self.surface.blit(first_player_score_text, (75, 30))
 
-        if self.hearts >= 1:
+        second_player_score_text = self.font.render(str(self.second_player_score), True, WHITE)
+        self.surface.blit(second_player_score_text, (285, 30))
+
+        if self.first_player_hearts >= 1:
             self.surface.blit(self.Components.heart, (10, 0))
 
-        if self.hearts >= 2:
+        if self.first_player_hearts >= 2:
             self.surface.blit(self.Components.heart, (45, 0))
 
-        if self.hearts >= 3:
+        if self.first_player_hearts >= 3:
             self.surface.blit(self.Components.heart, (80, 0))
 
-        if self.hearts >= 4:
+        if self.first_player_hearts >= 4:
             self.surface.blit(self.Components.heart, (115, 0))
 
-        if self.hearts == 5:
+        if self.first_player_hearts == 5:
             self.surface.blit(self.Components.heart, (150, 0))
 
-    def on_mouse_click(
-            self,
-            pointer_position
-    ):
+        if self.second_player_hearts >= 1:
+            self.surface.blit(self.Components.blue_heart, (220, 0))
 
-        self.Components.woosh_sfx.play()
+        if self.second_player_hearts >= 2:
+            self.surface.blit(self.Components.blue_heart, (255, 0))
 
-        if self.Components.diglett_rect.collidepoint(pointer_position):
-            self.combo += 1
-            self.score += self.combo
+        if self.second_player_hearts >= 3:
+            self.surface.blit(self.Components.blue_heart, (290, 0))
 
-            self.Components.diglett_rect.center = (-100, -100)
+        if self.second_player_hearts >= 4:
+            self.surface.blit(self.Components.blue_heart, (325, 0))
 
-            self.Components.diglett_cry.play()
-            self.diglett_type = self.DiglettType.NORMAL_HIT
+        if self.second_player_hearts == 5:
+            self.surface.blit(self.Components.blue_heart, (360, 0))
 
-        elif self.Components.shiny_diglett_rect.collidepoint(pointer_position):
-            self.combo += 1
-            self.score += self.combo + 100
+    def on_key_down(self, key):
 
-            self.Components.shiny_diglett_rect.center = (-100, -100)
+        if self.first_player_hearts > 0:
+            if key == pygame.K_q:
+                self.verify_collision(1, 0)
+            if key == pygame.K_w:
+                self.verify_collision(1, 1)
+            if key == pygame.K_e:
+                self.verify_collision(1, 2)
+            if key == pygame.K_a:
+                self.verify_collision(1, 3)
+            if key == pygame.K_s:
+                self.verify_collision(1, 4)
+            if key == pygame.K_d:
+                self.verify_collision(1, 5)
+            if key == pygame.K_z:
+                self.verify_collision(1, 6)
+            if key == pygame.K_x:
+                self.verify_collision(1, 7)
+            if key == pygame.K_c:
+                self.verify_collision(1, 8)
 
-            self.Components.diglett_cry.play()
-            self.diglett_type = self.DiglettType.SHINY_HIT
+        if self.second_player_hearts > 0:
+            if key == pygame.K_KP7:
+                self.verify_collision(2, 0)
+            if key == pygame.K_KP8:
+                self.verify_collision(2, 1)
+            if key == pygame.K_KP9:
+                self.verify_collision(2, 2)
+            if key == pygame.K_KP4:
+                self.verify_collision(2, 3)
+            if key == pygame.K_KP5:
+                self.verify_collision(2, 4)
+            if key == pygame.K_KP6:
+                self.verify_collision(2, 5)
+            if key == pygame.K_KP1:
+                self.verify_collision(2, 6)
+            if key == pygame.K_KP2:
+                self.verify_collision(2, 7)
+            if key == pygame.K_KP3:
+                self.verify_collision(2, 8)
 
-        elif self.Components.bomb_diglett_rect.collidepoint(pointer_position):
-            self.hearts -= 1
+    def verify_collision(self, player: int, position: int):
 
-            self.Components.bomb_diglett_rect.center = (-100, -100)
-
-            self.Components.bomb_sfx.play()
-            self.diglett_type = self.DiglettType.BOMB_HIT
-
-            if self.hearts == 0:
-                self.gameover()
-
-        elif self.Components.healing_diglett_rect.collidepoint(pointer_position):
-            self.hearts += 1
-            self.combo += 1
-            self.score += self.combo
-
-            self.Components.healing_diglett_rect.center = (-100, -100)
-
-            self.Components.life_sfx.play()
-            self.diglett_type = self.DiglettType.HEALING_HIT
-
+        if position == self.diglett_hole_position:
+            if player == 1:
+                self.first_player_score += 1
+            else:
+                self.second_player_score += 1
         else:
-            self.hearts -= 1
-            self.combo = 0
+            if player == 1:
+                self.first_player_hearts -= 1
+            else:
+                self.second_player_hearts -= 1
 
-            if self.hearts == 0:
+            if self.first_player_hearts == 0 and self.second_player_hearts == 0:
                 self.gameover()
 
     def gameover(self):
-        self.display.go_to_gameover_screen(self.score)
-        self.__init__(self.display, self.surface, self.font)
+        self.navigation.go_to_multiplayer_gameover_screen(self.first_player_score, self.second_player_score)
+        self.__init__(self.navigation, self.surface, self.font)

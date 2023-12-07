@@ -3,7 +3,7 @@ from pygame import Surface, SurfaceType
 from pygame.font import Font
 
 from Utils import get_image
-from screens import Display
+from screens import Navigation
 from Constants import BLACK
 
 
