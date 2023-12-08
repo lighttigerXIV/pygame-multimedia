@@ -2,6 +2,7 @@ import random
 from enum import Enum
 
 import pygame
+from pygame import SurfaceType, Surface
 
 from Constants import WHITE
 from Utils import get_image, get_sfx, get_music_path
@@ -18,7 +19,7 @@ class MultiPlayerScreen:
         self.move_diglett_up = True
         self.spawn_new_diglett = True
         self.navigation = navigation
-        self.surface = surface
+        self.surface: Surface | SurfaceType = surface
         self.font = font
         self.diglett_type = self.DiglettType.NORMAL
 
@@ -31,8 +32,8 @@ class MultiPlayerScreen:
         pygame.mixer.music.set_volume(0.1)
         pygame.mixer_music.play(True)
 
-    hole_positions = [(68, 254), (188, 344), (315, 240), (68, 410), (198, 456), (323, 398), (68, 540), (188, 588),
-                      (323, 556)]  # x, y
+    hole_positions = [(68, 258), (188, 344), (315, 238), (68, 412), (198, 458), (323, 398), (68, 542), (188, 590),
+                      (323, 557)]
 
     class Components:
         background = get_image("game_background.png")
@@ -119,29 +120,29 @@ class MultiPlayerScreen:
             self.surface.blit(self.Components.diglett, self.Components.diglett_rect)
             self.Components.diglett_rect.center = (x, y + self.diglett_y_offset)
 
-        if self.diglett_type == self.DiglettType.NORMAL_HIT:
-            self.surface.blit(self.Components.hit_diglett, self.Components.hit_diglett_rect)
-            self.Components.hit_diglett_rect.center = (x, y + self.diglett_y_offset)
-
         if self.diglett_type == self.DiglettType.SHINY:
             self.surface.blit(self.Components.shiny_diglett, self.Components.shiny_diglett_rect)
             self.Components.shiny_diglett_rect.center = (x, y + self.diglett_y_offset)
-
-        if self.diglett_type == self.DiglettType.SHINY_HIT:
-            self.surface.blit(self.Components.hit_shiny_diglett, self.Components.hit_shiny_diglett_rect)
-            self.Components.hit_shiny_diglett_rect.center = (x, y + self.diglett_y_offset)
 
         if self.diglett_type == self.DiglettType.HEALING:
             self.surface.blit(self.Components.healing_diglett, self.Components.healing_diglett_rect)
             self.Components.healing_diglett_rect.center = (x, y + self.diglett_y_offset)
 
-        if self.diglett_type == self.DiglettType.HEALING_HIT:
-            self.surface.blit(self.Components.hit_healing_diglett, self.Components.hit_healing_diglett_rect)
-            self.Components.hit_healing_diglett_rect.center = (x, y + self.diglett_y_offset)
-
         if self.diglett_type == self.DiglettType.BOMB:
             self.surface.blit(self.Components.bomb_diglett, self.Components.bomb_diglett_rect)
             self.Components.bomb_diglett_rect.center = (x, y + self.diglett_y_offset)
+
+        if self.diglett_type == self.DiglettType.NORMAL_HIT:
+            self.surface.blit(self.Components.hit_diglett, self.Components.hit_diglett_rect)
+            self.Components.hit_diglett_rect.center = (x, y + self.diglett_y_offset)
+
+        if self.diglett_type == self.DiglettType.SHINY_HIT:
+            self.surface.blit(self.Components.hit_shiny_diglett, self.Components.hit_shiny_diglett_rect)
+            self.Components.hit_shiny_diglett_rect.center = (x, y + self.diglett_y_offset)
+
+        if self.diglett_type == self.DiglettType.HEALING_HIT:
+            self.surface.blit(self.Components.hit_healing_diglett, self.Components.hit_healing_diglett_rect)
+            self.Components.hit_healing_diglett_rect.center = (x, y + self.diglett_y_offset)
 
         if self.diglett_type == self.DiglettType.BOMB_HIT:
             self.surface.blit(self.Components.hit_bomb_diglett, self.Components.hit_bomb_diglett_rect)
@@ -247,7 +248,6 @@ class MultiPlayerScreen:
 
             if self.diglett_type == self.DiglettType.NORMAL:
                 self.diglett_type = self.DiglettType.NORMAL_HIT
-                self.Components.diglett_rect.center = (-1000, -1000)
                 self.Components.diglett_cry.play()
 
                 if player == 1:
@@ -257,7 +257,6 @@ class MultiPlayerScreen:
 
             if self.diglett_type == self.DiglettType.SHINY:
                 self.diglett_type = self.DiglettType.SHINY_HIT
-                self.Components.shiny_diglett_rect.center = (-1000, -1000)
                 self.Components.diglett_cry.play()
 
                 if player == 1:
@@ -267,7 +266,6 @@ class MultiPlayerScreen:
 
             if self.diglett_type == self.DiglettType.HEALING:
                 self.diglett_type = self.DiglettType.HEALING_HIT
-                self.Components.healing_diglett_rect.center = (-1000, -1000)
                 self.Components.life_sfx.play()
 
                 if player == 1:
@@ -281,7 +279,6 @@ class MultiPlayerScreen:
 
             if self.diglett_type == self.DiglettType.BOMB:
                 self.diglett_type = self.DiglettType.BOMB_HIT
-                self.Components.bomb_diglett_rect.center = (-1000, -1000)
                 self.Components.bomb_sfx.play()
 
                 if player == 1:

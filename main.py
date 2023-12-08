@@ -55,6 +55,9 @@ while run:
 
                 navigation.go_to_menu_screen()
 
+            if navigation.show_gameover:
+                navigation.gameover_screen.on_key_press(event.key, event.unicode)
+
         if event.type == pygame.MOUSEBUTTONDOWN:
             pointer_position = pygame.mouse.get_pos()
 
@@ -71,7 +74,7 @@ while run:
                 navigation.singleplayer_screen.on_mouse_click(pointer_position)
 
             elif navigation.show_gameover:
-                navigation.go_to_menu_screen()
+                navigation.gameover_screen.on_mouse_click(pointer_position)
 
             elif navigation.show_multiplayer_gameover:
                 navigation.go_to_menu_screen()

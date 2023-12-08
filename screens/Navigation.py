@@ -28,7 +28,7 @@ class Navigation:
         self.tutorial_two_screen = TutorialTwoScreen(self, self.surface)
         self.singleplayer_screen = SinglePlayerScreen(self, self.surface, font)
         self.multiplayer_screen = MultiPlayerScreen(self, self.surface, font)
-        self.gameover_screen = GameOverScreen(self.surface)
+        self.gameover_screen = GameOverScreen(self.surface, self)
         self.multiplayer_gameover_screen = MultiPlayerGameOverScreen(self.surface)
 
         self.menu_screen.init_screen()

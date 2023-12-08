@@ -9,3 +9,5 @@ MUSIC_DIRECTORY = f"{ROOT_DIRECTORY}/assets/audio/music"
 # Colors
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
+GREY = (224, 224, 224)
+SELECTED_GREY = (214, 214, 214)
