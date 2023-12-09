@@ -24,6 +24,9 @@ while run:
     if navigation.show_tutorial_two:
         navigation.tutorial_two_screen.draw_screen()
 
+    if navigation.show_tutorial_three:
+        navigation.tutorial_three_screen.draw_screen()
+
     if navigation.show_singleplayer:
         navigation.singleplayer_screen.draw_screen()
 
@@ -69,6 +72,9 @@ while run:
 
             elif navigation.show_tutorial_two:
                 navigation.tutorial_two_screen.on_mouse_click()
+
+            elif navigation.show_tutorial_three:
+                navigation.tutorial_three_screen.on_mouse_click()
 
             elif navigation.show_singleplayer:
                 navigation.singleplayer_screen.on_mouse_click(pointer_position)

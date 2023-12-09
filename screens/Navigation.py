@@ -6,6 +6,7 @@ from screens.MultiPlayerScreen import MultiPlayerScreen
 from screens.GameoverScreen import GameOverScreen
 from screens.MultiplayerGameoverScreen import MultiPlayerGameOverScreen
 from screens.TutorialOneScreen import TutorialOneScreen
+from screens.TutorialThreeScreen import TutorialThreeScreen
 from screens.TutorialTwoScreen import TutorialTwoScreen
 
 
@@ -16,6 +17,7 @@ class Navigation:
         self.show_menu = True
         self.show_tutorial_one = False
         self.show_tutorial_two = False
+        self.show_tutorial_three = False
         self.show_singleplayer = False
         self.show_gameover = False
         self.show_multiplayer_gameover = False
@@ -26,6 +28,7 @@ class Navigation:
         self.menu_screen = MenuScreen(self, self.surface)
         self.tutorial_one_screen = TutorialOneScreen(self, self.surface)
         self.tutorial_two_screen = TutorialTwoScreen(self, self.surface)
+        self.tutorial_three_screen = TutorialThreeScreen(self, self.surface)
         self.singleplayer_screen = SinglePlayerScreen(self, self.surface, font)
         self.multiplayer_screen = MultiPlayerScreen(self, self.surface, font)
         self.gameover_screen = GameOverScreen(self.surface, self)
@@ -41,6 +44,7 @@ class Navigation:
             show_menu=False,
             show_tutorial_one=False,
             show_tutorial_two=False,
+            show_tutorial_three=False,
             show_singleplayer=False,
             show_gameover=False,
             show_multiplayer_gameover=False,
@@ -50,6 +54,7 @@ class Navigation:
         self.show_menu = show_menu
         self.show_tutorial_one = show_tutorial_one
         self.show_tutorial_two = show_tutorial_two
+        self.show_tutorial_three = show_tutorial_three
         self.show_singleplayer = show_singleplayer
         self.show_gameover = show_gameover
         self.show_multiplayer_gameover = show_multiplayer_gameover
@@ -65,6 +70,9 @@ class Navigation:
 
     def go_to_tutorial_two_screen(self):
         self.enable_screen(show_tutorial_two=True)
+
+    def go_to_tutorial_three_screen(self):
+        self.enable_screen(show_tutorial_three=True)
 
     def go_to_singleplayer_screen(self):
         self.enable_screen(show_singleplayer=True)
