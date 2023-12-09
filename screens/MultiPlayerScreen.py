@@ -248,6 +248,7 @@ class MultiPlayerScreen:
 
             if self.diglett_type == self.DiglettType.NORMAL:
                 self.diglett_type = self.DiglettType.NORMAL_HIT
+                self.Components.diglett_rect.center = (-1000, -1000)
                 self.Components.diglett_cry.play()
 
                 if player == 1:
@@ -257,6 +258,7 @@ class MultiPlayerScreen:
 
             if self.diglett_type == self.DiglettType.SHINY:
                 self.diglett_type = self.DiglettType.SHINY_HIT
+                self.Components.shiny_diglett_rect.center = (-1000, -1000)
                 self.Components.diglett_cry.play()
 
                 if player == 1:
@@ -266,6 +268,7 @@ class MultiPlayerScreen:
 
             if self.diglett_type == self.DiglettType.HEALING:
                 self.diglett_type = self.DiglettType.HEALING_HIT
+                self.Components.healing_diglett_rect.center = (-1000, -1000)
                 self.Components.life_sfx.play()
 
                 if player == 1:
@@ -279,6 +282,7 @@ class MultiPlayerScreen:
 
             if self.diglett_type == self.DiglettType.BOMB:
                 self.diglett_type = self.DiglettType.BOMB_HIT
+                self.Components.bomb_diglett_rect.center = (-1000, -1000)
                 self.Components.bomb_sfx.play()
 
                 if player == 1:
