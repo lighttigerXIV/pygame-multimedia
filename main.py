@@ -39,6 +39,9 @@ while run:
     if navigation.show_multiplayer_gameover:
         navigation.multiplayer_gameover_screen.draw_screen()
 
+    if navigation.show_highscores:
+        navigation.highscore_screen.draw_screen()
+
     weapon.center = pygame.mouse.get_pos()
 
     if not navigation.show_multiplayer:
@@ -84,6 +87,9 @@ while run:
 
             elif navigation.show_multiplayer_gameover:
                 navigation.go_to_menu_screen()
+
+            elif navigation.show_highscores:
+                navigation.highscore_screen.on_mouse_click()
 
         if navigation.show_multiplayer:
             if event.type == pygame.KEYDOWN:

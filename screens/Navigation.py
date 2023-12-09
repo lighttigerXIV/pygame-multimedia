@@ -8,6 +8,7 @@ from screens.MultiplayerGameoverScreen import MultiPlayerGameOverScreen
 from screens.TutorialOneScreen import TutorialOneScreen
 from screens.TutorialThreeScreen import TutorialThreeScreen
 from screens.TutorialTwoScreen import TutorialTwoScreen
+from screens.HighscoresScreen import HighscoresScreen
 
 
 class Navigation:
@@ -22,7 +23,7 @@ class Navigation:
         self.show_gameover = False
         self.show_multiplayer_gameover = False
         self.show_multiplayer = False
-        self.show_highscore = False
+        self.show_highscores = False
         self.surface = pygame.display.set_mode((400, 600))
         self.fps = pygame.time.Clock()
         self.menu_screen = MenuScreen(self, self.surface)
@@ -33,7 +34,7 @@ class Navigation:
         self.multiplayer_screen = MultiPlayerScreen(self, self.surface, font)
         self.gameover_screen = GameOverScreen(self.surface, self)
         self.multiplayer_gameover_screen = MultiPlayerGameOverScreen(self.surface)
-
+        self.highscore_screen = HighscoresScreen(self, self.surface)
         self.menu_screen.init_screen()
 
     def init_menu_screen(self):
@@ -49,7 +50,7 @@ class Navigation:
             show_gameover=False,
             show_multiplayer_gameover=False,
             show_multiplayer=False,
-            show_highscore=False
+            show_highscores=False
     ):
         self.show_menu = show_menu
         self.show_tutorial_one = show_tutorial_one
@@ -59,7 +60,7 @@ class Navigation:
         self.show_gameover = show_gameover
         self.show_multiplayer_gameover = show_multiplayer_gameover
         self.show_multiplayer = show_multiplayer
-        self.show_highscore = show_highscore
+        self.show_highscores = show_highscores
 
     def go_to_menu_screen(self):
         self.enable_screen(show_menu=True)
@@ -89,3 +90,7 @@ class Navigation:
     def go_to_multiplayer_gameover_screen(self, first_player_score, second_player_score):
         self.enable_screen(show_multiplayer_gameover=True)
         self.multiplayer_gameover_screen.init_screen(first_player_score, second_player_score)
+
+    def go_to_highscore_screen(self):
+        self.enable_screen(show_highscores=True)
+        self.highscore_screen.init_screen()

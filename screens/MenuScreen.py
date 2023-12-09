@@ -1,13 +1,13 @@
 import pygame
-import screens.Navigation
 from pygame import Surface, SurfaceType
 from Utils import get_image, get_music_path
+from screens import Navigation
 
 
 class MenuScreen:
 
-    def __init__(self, display, surface):
-        self.display: screens.Display = display
+    def __init__(self, navigation, surface):
+        self.navigation: Navigation = navigation
         self.surface: Surface | SurfaceType = surface
 
     def init_screen(self):
@@ -44,10 +44,13 @@ class MenuScreen:
             pointer_position
     ):
         if self.Components.singleplayer_button_rect.collidepoint(pointer_position):
-            self.display.go_to_tutorial_one_screen()
+            self.navigation.go_to_tutorial_one_screen()
 
         if self.Components.multiplayer_button_rect.collidepoint(pointer_position):
-            self.display.go_to_tutorial_two_screen()
+            self.navigation.go_to_tutorial_two_screen()
+
+        if self.Components.highscore_button_rect.collidepoint(pointer_position):
+            self.navigation.go_to_highscore_screen()
 
     def draw_screen(self):
         self.surface.blit(MenuScreen.Components.background, (0, 0))
