@@ -9,10 +9,20 @@ from Constants import IMAGES_DIRECTORY, SFX_DIRECTORY, MUSIC_DIRECTORY
 
 
 def get_image(name: str) -> Surface | SurfaceType:
+    """
+    Get an image from the images directory
+    :param name:
+    :return: Surface or SurfaceType
+    """
     return pygame.image.load(f"{IMAGES_DIRECTORY}/{name}")
 
 
 def get_sfx(name: str) -> Sound:
+    """
+    Get a sound effect from the sound effects directory
+    :param name:
+    :return: Sound
+    """
     if not pygame.mixer.get_init():
         pygame.mixer.init()
 
@@ -20,10 +30,21 @@ def get_sfx(name: str) -> Sound:
 
 
 def get_music_path(name: str) -> str:
+    """
+    Get a path of a music file from the music directory
+    :param name:
+    :return: str
+    """
     return f"{MUSIC_DIRECTORY}/{name}"
 
 
 def write_highscore(player_name: str, score: int):
+    """
+    Writes the highscore in the highscores file if the score is higher than the current player's score
+    :param player_name:
+    :param score:
+    :return:
+    """
     if not os.path.exists("highscores.csv"):
         scores_df = pd.DataFrame(columns=["name", "score", "last_modified"])
         scores_df.to_csv("highscores.csv", index=False)
@@ -47,6 +68,10 @@ def write_highscore(player_name: str, score: int):
 
 
 def get_last_used_name() -> str:
+    """
+    Get the last used player name
+    :return: str
+    """
     if not os.path.exists("highscores.csv"):
         return "Player 1"
 
