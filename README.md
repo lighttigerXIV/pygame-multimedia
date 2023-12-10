@@ -5,7 +5,6 @@
 This small python game was developed for the class **Multimedia**. It's a *Whack A Mole* inspired game where you can smack digletts and weirdly have fun.
 
 ### Steps To Build
-Install the dependencies:
 
 `pip install -r requirements.txt`
 
@@ -18,7 +17,6 @@ Install the dependencies:
 Este pequeno jogo foi desenvolvido para a disciplina de **Multimedia**. É um jogo inspirado pelo jogo *Whack A Mole* em que se bate em digletts.
 
 ### Passos para compilar
-Instalar dependências:
 
 `pip install -r requirements.txt`
 
